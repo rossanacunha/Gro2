@@ -1,19 +1,16 @@
 ﻿var ViewModel = function () {
 
     var self = this;
-    self.products = ko.observableArray();
     self.error = ko.observable();
     self.categories = ko.observableArray();
-    self.newProduct = {
-        Category: ko.observable(),
+    self.newCategory = {
         Name: ko.observable()
     }
 
-    var productsUri = '/api/products/';
     var categoriesUri = '/api/categories/';
 
     function ajaxHelper(uri, method, data) {
-        self.error(''); 
+        self.error('');
         return $.ajax({
             type: method,
             url: uri,
@@ -25,34 +22,32 @@
         });
     }
 
-    function getAllProducts() {
-        ajaxHelper(productsUri, 'GET').done(function (data) {
-            self.products(data);
-        });
-    }
-
-
     function getCategories() {
         ajaxHelper(categoriesUri, 'GET').done(function (data) {
             self.categories(data);
         });
     }
 
-
-    self.addProduct = function (formElement) {
-        var product = {
-            CategoryId: self.newProduct.Category().Id,
-            Name: self.newProduct.Name()
-        };
-
-        ajaxHelper(productsUri, 'POST', product).done(function (item) {
-            self.products.push(item);
+    self.addCategory = function () {
+        self.categories.push({
+            name: ""
         });
-    }
+    };
+
+    self.removeCategory = function (category) {
+        self.gifts.remove(category);
+    };
+
+    self.save = function (form) {
+        //alert("Could now transmit to server: " + ko.utils.stringifyJson(self.categories));
+        ko.utils.postJson($("form")[0], self.categories);
+    };
 
     // Fetch the initial data.
-    getAllProducts();
     getCategories();
 };
 
 ko.applyBindings(new ViewModel());
+
+// Activate jQuery Validation
+//$("form").validate({ submitHandler: ViewModel.save });

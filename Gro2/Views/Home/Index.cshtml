@@ -6,46 +6,34 @@
     <h1>Groceries list</h1>
 </div>
 
-<div class="row">
-
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 class="panel-title">Products</h2>
-            </div>
-            <div class="panel-body">
-                <ul class="list-unstyled" data-bind="foreach: products">
-                    <li>
-                        <span data-bind="text: Name"></span> (<span data-bind="text: CategoryName"></span>)
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="alert alert-danger" data-bind="visible: error"><p data-bind="text: error"></p></div>
+<div id="list" class="row">
+    <div class="table-responsive col-md-12">
+        <table class="table table-striped" cellspacing="0" cellpadding="0" data-bind='visible: categories().length > 0'>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody data-bind='foreach: categories'>
+                <tr>
+                    <td><span data-bind="text: Id"></span></td>
+                    <td><input class='required' data-bind='value: Name, uniqueName: true' /></td>
+                    <td class="actions">
+                        <button class="btn btn-lg glyphicon glyphicon-edit"
+                                title="Click here to edit record" data-bind="click:$root.save"></button>
+                        <button class="btn btn-lg glyphicon glyphicon-remove-circle"
+                                title="Click here to delete." data-bind="click:$root.removeCategory"></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-lg glyphicon glyphicon-plus-sign"
+                title="Click here to add record"
+                data-bind='click: addCategory'></button> 
+        <button type="submit" class="btn btn-lg glyphicon glyphicon-floppy-save"
+                title="Click here to save" data-bind='enable: categories().length > 0'></button>
     </div>
-
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 class="panel-title">Add Product</h2>
-            </div>
-            <div class="panel-body">
-                <form class="form-horizontal" data-bind="submit: addProduct">
-                    <div class="form-group">
-                        <label for="inputCategory" class="col-sm-2 control-label">Category</label>
-                        <div class="col-sm-10">
-                            <select data-bind="options:categories, optionsText: 'Name', value: newProduct.Category"></select>
-                        </div>
-                    </div>
-                    <div class="form-group" data-bind="with: newProduct">
-                        <label for="inputName" class="col-sm-2 control-label">Name</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputName" data-bind="value:Name" placeholder="Name" />
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+    <div class="alert alert-danger" data-bind="visible: error"><p data-bind="text: error"></p></div>
+</div> <!-- /#list -->
